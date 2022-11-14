@@ -22,7 +22,7 @@ const SPRITE_SCALE: f32 = 0.5;
 // region: --- Game Constants
 
 const TIME_STEP: f32 = 1.0 / 60.;
-const BASE_SPEED: f32 = 400.;
+const BASE_SPEED: f32 = 300.;
 
 // endregion: --- Game Constants
 
@@ -107,5 +107,20 @@ fn movable_system(
         let translation = &mut transform.translation;
         translation.x += velocity.x * TIME_STEP * BASE_SPEED;
         translation.y += velocity.y * TIME_STEP * BASE_SPEED;
+
+        if movable.auto_despawn {
+            // despawn when out of screen
+            const MARGIN: f32 = 200.;
+            let outside_bottom = translation.y > win_size.h / 2. + MARGIN;
+            let outside_top = translation.y < -win_size.h / 2. - MARGIN;
+            let outside_right = translation.x > win_size.w / 2. + MARGIN;
+            let outside_left = translation.x < -win_size.w / 2. - MARGIN;
+            let outside = outside_bottom || outside_top || outside_right || outside_left;
+
+            if outside {
+                // println!("==> despawn {entity:?}");
+                commands.entity(entity).despawn();
+            }
+        }
     }
 }
