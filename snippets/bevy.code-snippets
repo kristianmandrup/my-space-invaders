@@ -1,0 +1,94 @@
+{
+  "Bevy: Use prelude": {
+    "prefix": "bevy use prelude",
+    "body": ["use bevy::prelude::*;"],
+    "description": "Use bevy prelude"
+  },
+  "Rust Region": {
+    "prefix": "bevy region",
+    "body": ["// region: --- $1", "\t ${0}", "// endregion: --- $1"],
+    "description": "Region space"
+  },
+  "Bevy: New Plugin": {
+    "prefix": "bevy plugin",
+    "body": [
+      "struct ${1:AwesomePlugin};",
+      "",
+      "impl Plugin for ${1:AwesomePlugin} {",
+      "\tfn build(&self, app: &mut App) {",
+      "\t\ttodo!()",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a new Plugin"
+  },
+  "Bevy: New PluginGroup": {
+    "prefix": "bevy plugin group",
+    "body": [
+      "struct ${1:AwesomePlugins};",
+      "",
+      "impl PluginGroup for ${1:AwesomePlugins} {",
+      "\tfn build(&mut self, group: &mut PluginGroupBuilder) {",
+      "\t\ttodo!()",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a new PluginGroup"
+  },
+  "Query Param": {
+    "prefix": "query",
+    "body": "${1:query}: Query<${0}>"
+  },
+  "Mutable Query Param": {
+    "prefix": "query mut",
+    "body": "mut ${1:query}: Query<${0}>"
+  },
+  "QuerySet Param": {
+    "prefix": "query set",
+    "body": "${1:query}: QuerySet<(Query<${2}>, Query<${0}>)>"
+  },
+  "Mutable QuerySet Param": {
+    "prefix": "query set mut",
+    "body": "mut ${1:query}: QuerySet<(Query<${2}>, Query<${0}>)>"
+  },
+  "Commands Param": {
+    "prefix": "commands",
+    "body": "mut ${0:commands}: Commands"
+  },
+  "Res Param": {
+    "prefix": "res",
+    "body": "${1:res}: Res<${0}>"
+  },
+  "ResMut Param": {
+    "prefix": "res mut",
+    "body": "mut ${1:res}: ResMut<${0}>"
+  },
+  "EventWriter Param": {
+    "prefix": "event writer",
+    "body": "mut ${1:events}: EventWriter<${0}>"
+  },
+  "EventReader Param": {
+    "prefix": "event reader",
+    "body": "mut ${1:events}: EventReader<${0}>"
+  },
+  "Local Param": {
+    "prefix": "local",
+    "body": "mut ${1:local}: Local<${0}>"
+  },
+  "App Template": {
+    "prefix": "app",
+    "body": [
+      "use bevy::prelude::*;",
+      "",
+      "fn main() {",
+      "   App::new()",
+      "       .add_plugins(DefaultPlugins)${0}",
+      "       .run();",
+      "}"
+    ]
+  },
+  "Component": {
+    "prefix": "component",
+    "body": ["#[derive(Component)]", "struct ${0}"]
+  }
+}
