@@ -1,0 +1,22 @@
+[package]
+name = "my-space-invaders"
+version = "0.3.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+# Enable max optimizations for dependencies, but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+
+# Enable only a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+[workspace]
+resolver = "2" # Important! wgpu/Bevy needs this!
+
+[dependencies]
+bevy = "0.9"
+rand = "0.8"
+bevy-inspector-egui = "0.14"
+# iyes_loopless = "0.9"
