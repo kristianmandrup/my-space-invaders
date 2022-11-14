@@ -1,6 +1,6 @@
 use bevy::{prelude::*};
 
-use crate::{GameTextures, WinSize, SPRITE_SCALE, PLAYER_SIZE, components::{Player, Velocity, Movable}, TIME_STEP, BASE_SPEED};
+use crate::{GameTextures, WinSize, SPRITE_SCALE, PLAYER_SIZE, components::{Player, Velocity, Movable, FromPlayer, SpriteSize, Laser}, TIME_STEP, BASE_SPEED, PLAYER_LASER_SIZE};
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
@@ -30,6 +30,7 @@ fn player_spawn_system(
         },
         ..default()
     })
+    .insert(SpriteSize::from(PLAYER_SIZE))
     .insert(Player)
     .insert(Movable { auto_despawn: false })
     .insert(Velocity {
@@ -59,6 +60,9 @@ fn player_fire_system(
                     },
                     ..default()
                 })
+                .insert(Laser)
+                .insert(FromPlayer)
+                .insert(SpriteSize::from(PLAYER_LASER_SIZE))            
                 .insert(Velocity {
                     x: 0.,
                     y: 1.
