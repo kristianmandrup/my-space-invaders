@@ -27,7 +27,7 @@ const PLAYER_LASER_SIZE: (f32, f32) = (9., 54.);
 
 const ENEMY_LASER_SPRITE: &str = "laser_b_01.png"; 
 const ENEMY_LASER_SIZE: (f32, f32) = (7., 55.);
-const ENEMY_MAX_COUNT: u32 = 2;
+const ENEMY_MAX_COUNT: u32 = 5;
 
 const SPRITE_SCALE: f32 = 0.5;
 
