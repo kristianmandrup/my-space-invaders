@@ -1,4 +1,4 @@
-use bevy::prelude::{Component, Vec2};
+use bevy::{prelude::{Component, Vec2, Vec3}, time::{Timer, TimerMode}};
 
 // region: --- Common Components
 #[derive(Component)]
@@ -45,4 +45,24 @@ pub struct FromEnemy;
 
 
 // endregion: --- Enemy Components
+
+// region: --- Explosion Components
+
+#[derive(Component)]
+pub struct Explosion;
+
+#[derive(Component)]
+pub struct ExplosionToSpawn(pub Vec3);
+
+#[derive(Component)]
+pub struct ExplosionTimer(pub Timer);
+
+impl Default for ExplosionTimer {
+    fn default() -> Self {
+        Self(Timer::from_seconds(0.05, TimerMode::Repeating))
+    }
+}
+
+// endregion: --- Explosion Components
+
 
