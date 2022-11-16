@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, default};
 
 #[allow(unused)]
 use bevy::prelude::*;
@@ -27,7 +27,6 @@ const PLAYER_LASER_SIZE: (f32, f32) = (9., 54.);
 
 const ENEMY_LASER_SPRITE: &str = "laser_b_01.png"; 
 const ENEMY_LASER_SIZE: (f32, f32) = (7., 55.);
-const ENEMY_MAX_COUNT: u32 = 5;
 
 const SPRITE_SCALE: f32 = 0.5;
 
@@ -37,6 +36,9 @@ const SPRITE_SCALE: f32 = 0.5;
 
 const TIME_STEP: f32 = 1.0 / 60.;
 const BASE_SPEED: f32 = 300.;
+
+const PLAYER_RESPAWN_DELAY: f64 = 2.;
+const ENEMY_MAX_COUNT: u32 = 5;
 
 // endregion: --- Game Constants
 
@@ -59,6 +61,30 @@ struct GameTextures {
 #[derive(Resource)]
 struct EnemyCount(u32);
 
+#[derive(Resource)]
+struct PlayerState {
+    on: bool, // alive
+    last_shot: f64, // -1 if not shot
+}
+impl Default for PlayerState {
+    fn default() -> Self {
+        Self {
+            on: false,
+            last_shot: -1.,
+        }
+    }
+}
+impl PlayerState {
+    pub fn shot(&mut self, time: f64) {
+        self.on = false;
+        self.last_shot = time;
+    }
+
+    pub fn spawned(&mut self) {
+        self.on = true;
+        self.last_shot = -1.;
+    }
+}
 // endregion: --- Resources
 
 fn main() {
@@ -167,6 +193,8 @@ fn movable_system(
 
 fn enemy_laser_hit_system(
     mut commands: Commands,
+    mut player_state: ResMut<PlayerState>,
+    time: Res<Time>,
     laser_query: Query<(Entity, &Transform, &SpriteSize), (With<Laser>, With<FromEnemy>)>,
     player_query: Query<(Entity, &Transform, &SpriteSize), With<Player>>,
 )
@@ -188,6 +216,7 @@ fn enemy_laser_hit_system(
             if let Some(_) = collision {
                 // remove player
                 commands.entity(player_entity).despawn();
+                player_state.shot(time.elapsed_seconds_f64());
 
                 // remove laser
                 commands.entity(laser_entity).despawn();
