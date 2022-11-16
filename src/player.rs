@@ -1,6 +1,6 @@
 use bevy::{prelude::*};
 
-use crate::{GameTextures, WinSize, SPRITE_SCALE, PLAYER_SIZE, components::{Player, Velocity, Movable, FromPlayer, SpriteSize, Laser}, TIME_STEP, BASE_SPEED, PLAYER_LASER_SIZE};
+use crate::{GameTextures, WinSize, SPRITE_SCALE, PLAYER_SIZE, components::{Player, Velocity, Movable, FromPlayer, SpriteSize, Laser}, PLAYER_LASER_SIZE};
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
