@@ -1,4 +1,4 @@
-use std::{collections::HashSet, default};
+use std::{collections::HashSet};
 
 #[allow(unused)]
 use bevy::prelude::*;
@@ -38,7 +38,7 @@ const TIME_STEP: f32 = 1.0 / 60.;
 const BASE_SPEED: f32 = 300.;
 
 const PLAYER_RESPAWN_DELAY: f64 = 2.;
-const ENEMY_MAX_COUNT: u32 = 5;
+const ENEMY_MAX_COUNT: u32 = 3;
 
 // endregion: --- Game Constants
 

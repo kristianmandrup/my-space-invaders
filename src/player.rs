@@ -6,6 +6,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app
+            .insert_resource(PlayerState::default())
             .add_system_set(
                 SystemSet::new()
                     .with_run_criteria(FixedTimestep::step(0.5))
@@ -32,22 +33,24 @@ fn player_spawn_system(
         let bottom = -win_size.h /2.;
         let player_pos_y = bottom + PLAYER_SIZE.1 / 2. + 5.;
 
-        commands.spawn(SpriteBundle {
-            texture: game_textures.player.clone(),
-            transform: Transform {
-                translation: Vec3::new(0., player_pos_y, 10.),
-                scale: Vec3::new(SPRITE_SCALE, SPRITE_SCALE, 1.),
+        commands
+            .spawn(SpriteBundle {
+                texture: game_textures.player.clone(),
+                transform: Transform {
+                    translation: Vec3::new(0., player_pos_y, 10.),
+                    scale: Vec3::new(SPRITE_SCALE, SPRITE_SCALE, 1.),
+                    ..default()
+                },
                 ..default()
-            },
-            ..default()
-        })
-        .insert(SpriteSize::from(PLAYER_SIZE))
-        .insert(Player)
-        .insert(Movable { auto_despawn: false })
-        .insert(Velocity {
-            x: 0.,
-            y: 0.
-        });
+            })
+            .insert(SpriteSize::from(PLAYER_SIZE))
+            .insert(Player)
+            .insert(Movable { auto_despawn: false })
+            .insert(Velocity {
+                x: 0.,
+                y: 0.
+            });
+        player_state.spawned()
     }
 }
 

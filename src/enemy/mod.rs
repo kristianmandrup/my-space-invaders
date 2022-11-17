@@ -1,8 +1,11 @@
-use std::f32::consts::PI;
-
+use std::{f32::consts::PI};
 use bevy::{prelude::*, time::FixedTimestep, ecs::schedule::ShouldRun};
 use rand::{thread_rng, Rng};
-use crate::{GameTextures, SPRITE_SCALE, WinSize, components::{Enemy, SpriteSize, Velocity, Movable, FromEnemy, Laser}, ENEMY_LASER_SIZE, ENEMY_SIZE, ENEMY_MAX_COUNT, EnemyCount};
+use crate::{GameTextures, SPRITE_SCALE, WinSize, components::{Enemy, SpriteSize, Velocity, Movable, FromEnemy, Laser}, ENEMY_LASER_SIZE, ENEMY_SIZE, ENEMY_MAX_COUNT, EnemyCount, BASE_SPEED, TIME_STEP};
+
+mod formation;
+
+
 
 pub struct EnemyPlugin;
 
@@ -18,7 +21,57 @@ impl Plugin for EnemyPlugin {
                 SystemSet::new()
                     .with_run_criteria(enemy_fire_criteria)
                     .with_system(enemy_fire_system)
-            );
+            )
+            .add_system(enemy_movement_system);
+    }
+}
+
+fn enemy_movement_system(
+    time: Res<Time>,
+    mut query: Query<&mut Transform, With<Enemy>>,    
+)
+{
+    let now = time.elapsed_seconds();
+    for mut transform in query.iter_mut() {
+        // current pos
+        let (x_org, y_org) = (transform.translation.x, transform.translation.y);
+
+        let delta = BASE_SPEED * TIME_STEP;
+
+        // max distance
+        let max_distance = delta; 
+
+        // fixtures
+        let dir: f32 = -1.; // 1 is counter-clockwise, -1 is clockwise
+        let (x_pivot, y_pivot) = (0., 0.);
+        let (x_radius, y_radius) = (200., 130.);
+
+        // compute next angle (based on time)
+        let angle = dir * delta * now % 360. / PI;
+
+        // compute target x/y
+        let x_dst = x_radius * angle.cos() + x_pivot;
+        let y_dst = y_radius * angle.sin() + y_pivot;
+
+        // compute distance
+        let dx = x_org - x_dst;
+        let dy = y_org - y_dst;
+        let distance = (dx * dx + dy * dy).sqrt();
+        let distance_ratio = if distance != 0. {
+            max_distance / distance
+        } else {
+            0.
+        };
+        // compute final x/y
+        let x = x_org - dx * distance_ratio;
+        let x = if dx > 0. { x.max(x_dst) } else { x.min(x_dst) };
+
+        let y = y_org - dy * distance_ratio;
+        let y = if dy > 0. { y.max(y_dst) } else { y.min(y_dst) };
+
+        // new pos
+        let translation = &mut transform.translation;
+        (translation.x, translation.y) = (x, y);
     }
 }
 
