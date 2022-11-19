@@ -15,8 +15,8 @@ pub struct Formation {
 
 // Resource Formation Maker
 
-#[derive(Default)]
-struct FormationMaker {
+#[derive(Default, Resource)]
+pub struct FormationMaker {
     current_template: Option<Formation>,
     current_members: u32
 }
